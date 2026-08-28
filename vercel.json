@@ -1,8 +1,4 @@
 {
-  "version": 2,
-  "functions": {
-    "api/**/*.js": { "runtime": "nodejs20.x" }
-  },
   "rewrites": [
     { "source": "/api/orders/:id/status", "destination": "/api/orders/[id]/status" },
     { "source": "/admin.html",            "destination": "/public/admin.html" },
