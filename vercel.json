@@ -1,14 +1,13 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "public/**", "use": "@vercel/static" },
-    { "src": "api/**/*.js", "use": "@vercel/node" }
-  ],
   "routes": [
     { "src": "/api/orders/([^/]+)/status", "dest": "/api/orders/[id]/status" },
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/admin.html", "dest": "/public/admin.html" },
-    { "src": "/", "dest": "/public/index.html" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+    { "src": "/admin",     "dest": "/public/admin.html" },
+    { "src": "/css/(.*)",  "dest": "/public/css/$1" },
+    { "src": "/js/(.*)",   "dest": "/public/js/$1" },
+    { "src": "/images/(.*)", "dest": "/public/images/$1" },
+    { "src": "/(.*)",      "dest": "/public/index.html" }
   ]
 }
