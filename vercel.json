@@ -1,11 +1,14 @@
 {
+  "buildCommand": "echo build",
+  "outputDirectory": "public",
+  "framework": null,
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "@vercel/node@3.0.7"
+    }
+  },
   "rewrites": [
     { "source": "/api/orders/:id/status", "destination": "/api/orders/[id]/status" },
-    { "source": "/admin.html",            "destination": "/public/admin.html" },
-    { "source": "/admin",                 "destination": "/public/admin.html" },
-    { "source": "/css/:file*",            "destination": "/public/css/:file*" },
-    { "source": "/js/:file*",             "destination": "/public/js/:file*" },
-    { "source": "/images/:file*",         "destination": "/public/images/:file*" },
-    { "source": "/((?!api/).*)",          "destination": "/public/index.html" }
+    { "source": "/((?!api/).*)",          "destination": "/index.html" }
   ]
 }
