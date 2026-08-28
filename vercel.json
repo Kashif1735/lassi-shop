@@ -1,9 +1,14 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/orders/:id/status", "destination": "/api/orders/[id]/status" },
-    { "source": "/",                      "destination": "/public/index.html" },
-    { "source": "/admin",                 "destination": "/public/admin.html" },
-    { "source": "/admin.html",            "destination": "/public/admin.html" }
+  "builds": [
+    { "src": "public/**", "use": "@vercel/static" },
+    { "src": "api/**/*.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/orders/([^/]+)/status", "dest": "/api/orders/[id]/status" },
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/admin.html", "dest": "/public/admin.html" },
+    { "src": "/", "dest": "/public/index.html" },
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
