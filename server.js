@@ -313,7 +313,7 @@ app.patch('/api/orders/:id/status', async (req, res) => {
 });
 
 // ─── Catch-all → Customer Page ────────────────────────────────────────────────
-app.get('*', (req, res) => {
+app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
