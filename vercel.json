@@ -1,13 +1,12 @@
 {
   "version": 2,
-  "routes": [
-    { "src": "/api/orders/([^/]+)/status", "dest": "/api/orders/[id]/status" },
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/admin.html", "dest": "/public/admin.html" },
-    { "src": "/admin",     "dest": "/public/admin.html" },
-    { "src": "/css/(.*)",  "dest": "/public/css/$1" },
-    { "src": "/js/(.*)",   "dest": "/public/js/$1" },
-    { "src": "/images/(.*)", "dest": "/public/images/$1" },
-    { "src": "/(.*)",      "dest": "/public/index.html" }
+  "rewrites": [
+    { "source": "/api/orders/:id/status", "destination": "/api/orders/[id]/status" },
+    { "source": "/admin.html",            "destination": "/public/admin.html" },
+    { "source": "/admin",                 "destination": "/public/admin.html" },
+    { "source": "/css/:file*",            "destination": "/public/css/:file*" },
+    { "source": "/js/:file*",             "destination": "/public/js/:file*" },
+    { "source": "/images/:file*",         "destination": "/public/images/:file*" },
+    { "source": "/((?!api/).*)",          "destination": "/public/index.html" }
   ]
 }
