@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Colors */
+  --bg-primary: hsl(43, 30%, 97%);
+  --bg-secondary: hsl(0, 0%, 100%);
+  --bg-glass: rgba(255, 255, 255, 0.75);
+  --bg-dark-glass: rgba(30, 18, 10, 0.9);
+  
+  --color-primary: hsl(38, 95%, 52%); /* Saffron Mango Gold */
+  --color-primary-light: hsl(38, 95%, 90%);
+  --color-primary-dark: hsl(35, 95%, 40%);
+  
+  --color-secondary: hsl(340, 80%, 55%); /* Fragrant Rose Pink */
+  --color-secondary-light: hsl(340, 80%, 93%);
+  
+  --color-green: hsl(142, 45%, 28%); /* Cardamom Green */
+  --color-green-light: hsl(142, 45%, 92%);
+  
+  --color-orange: hsl(24, 85%, 48%); /* Terracotta Orange */
+  --color-orange-light: hsl(24, 85%, 92%);
+
+  --color-text-main: hsl(24, 30%, 12%); /* Warm Charcoal */
+  --color-text-muted: hsl(24, 12%, 45%);
+  --color-text-light: hsl(24, 10%, 96%);
+
+  --border-color: hsl(43, 20%, 90%);
+  --border-color-focus: hsl(38, 95%, 52%);
+
+  /* Typography */
+  --font-family-title: 'Outfit', sans-serif;
+  --font-family-body: 'Inter', sans-serif;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(30, 18, 10, 0.04);
+  --shadow-md: 0 8px 24px rgba(30, 18, 10, 0.08);
+  --shadow-lg: 0 16px 40px rgba(30, 18, 10, 0.12);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+
+  /* Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* Borders */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+}
+
+/* Base resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-body);
+  background-color: var(--bg-primary);
+  color: var(--color-text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-title);
+  color: var(--color-text-main);
+  font-weight: 700;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(24, 10%, 80%);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(24, 10%, 70%);
+}
+
+/* Common components */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-orange));
+  color: white;
+  box-shadow: 0 4px 14px rgba(217, 83, 30, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(217, 83, 30, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--color-text-main);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-primary);
+  border-color: var(--color-text-muted);
+}
+
+.btn-accent {
+  background-color: var(--color-secondary);
+  color: white;
+  box-shadow: 0 4px 14px rgba(220, 38, 127, 0.2);
+}
+
+.btn-accent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 127, 0.3);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-pending {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.badge-preparing {
+  background-color: var(--color-orange-light);
+  color: var(--color-orange);
+}
+
+.badge-ready {
+  background-color: var(--color-green-light);
+  color: var(--color-green);
+}
+
+.badge-completed {
+  background-color: hsl(240, 10%, 90%);
+  color: var(--color-text-muted);
+}
+
+/* Toast Notification Styles */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9999;
+  width: 90%;
+  max-width: 380px;
+}
+
+.toast {
+  background: var(--bg-dark-glass);
+  color: white;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+  animation: slideUpFade 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+}
+
+.toast-success {
+  border-left: 4px solid var(--color-primary);
+}
+
+.toast-error {
+  border-left: 4px solid var(--color-secondary);
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast.fade-out {
+  animation: slideDownFade 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+}
+
+@keyframes slideDownFade {
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}

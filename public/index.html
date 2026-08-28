@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lassi Shop - Fresh & Creamy Online Ordering</title>
+  <meta name="description" content="Order fresh Punjabi Lassis, Mango Lassis, and hot Indian snacks directly from your table. Quick self-ordering via QR code.">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/customer.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- 1. Top Header -->
+    <header class="header">
+      <div class="brand-section">
+        <h1 class="brand-name">
+          <i data-lucide="glass-water" style="color:var(--color-orange); fill:var(--color-primary); width:28px; height:28px;"></i>
+          <span>Lassi Shop</span>
+        </h1>
+        <span class="brand-subtitle">Fresh, Creamy & Traditional</span>
+      </div>
+      <div class="table-indicator" id="table-indicator">
+        <i data-lucide="map-pin" style="width:16px; height:16px"></i>
+        <span id="table-number-val">Detecting...</span>
+      </div>
+    </header>
+
+    <!-- 2. Active Order Tracker Panel -->
+    <section id="order-tracker" style="display: none; padding: 16px 20px 0 20px;">
+      <!-- Populated dynamically via customer.js -->
+    </section>
+
+    <!-- 3. Horizontal Categories Filter Slider -->
+    <div class="categories-container">
+      <div class="categories-list" id="categories-list">
+        <!-- Categories tabs populated dynamically -->
+      </div>
+    </div>
+
+    <!-- 4. Menu Items Grid List -->
+    <main class="menu-section">
+      <h2 class="menu-title">
+        <i data-lucide="sparkles" style="color:var(--color-primary); fill:var(--color-primary-light); width:20px; height:20px"></i>
+        <span>Our Specials</span>
+      </h2>
+      <div class="menu-grid" id="menu-grid">
+        <!-- Menu cards populated dynamically -->
+      </div>
+    </main>
+
+    <!-- 5. Floating Bottom Cart Bar -->
+    <div class="cart-bar-floating" id="cart-bar-floating" style="display: none;">
+      <div class="cart-bar-info">
+        <span class="cart-bar-count" id="cart-bar-count-val">0 Items</span>
+        <span class="cart-bar-total" id="cart-bar-total-val">₹0</span>
+      </div>
+      <button class="btn btn-primary" id="view-cart-btn-click">
+        <span>View Cart</span>
+        <i data-lucide="shopping-bag" style="width:18px; height:18px"></i>
+      </button>
+    </div>
+
+    <!-- 6. Dark Backdrop Drawer Overlay -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+
+    <!-- 7. Slide-Up Cart Drawer -->
+    <div class="cart-drawer" id="cart-drawer">
+      <div class="drawer-header">
+        <h3 class="drawer-title">
+          <i data-lucide="shopping-cart" style="color:var(--color-orange)"></i>
+          <span>Your Basket</span>
+        </h3>
+        <button class="close-drawer-btn" id="close-drawer">
+          <i data-lucide="x" style="width:20px; height:20px"></i>
+        </button>
+      </div>
+      <div class="drawer-content">
+        <!-- Empty State -->
+        <div class="cart-empty-state" id="cart-empty-state">
+          <i class="cart-empty-icon" data-lucide="shopping-bag" style="width:64px; height:64px"></i>
+          <p style="font-weight:600; font-size:1.1rem">Your basket is empty</p>
+          <p style="font-size:0.85rem">Add some delicious lassis or snacks to get started!</p>
+        </div>
+        <!-- Items List -->
+        <div class="cart-items-list" id="cart-items-list" style="display: none;">
+          <!-- Items injected dynamically -->
+        </div>
+      </div>
+      <div class="drawer-footer" id="cart-drawer-footer" style="display: none;">
+        <div class="summary-row">
+          <span style="color:var(--color-text-muted)">Subtotal</span>
+          <span id="drawer-subtotal">₹0</span>
+        </div>
+        <div class="summary-row total">
+          <span>Grand Total</span>
+          <span id="drawer-total">₹0</span>
+        </div>
+        <button class="btn btn-primary" id="checkout-btn" style="width: 100%; margin-top: 8px;">
+          <span>Proceed to Order</span>
+          <i data-lucide="arrow-right" style="width:18px; height:18px"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 8. Checkout Customer Details Modal -->
+    <div class="checkout-modal" id="checkout-modal">
+      <div class="modal-header">
+        <h3 style="display:flex; align-items:center; gap:8px">
+          <i data-lucide="user-check" style="color:var(--color-orange)"></i>
+          <span>Customer Details</span>
+        </h3>
+        <button class="close-drawer-btn" id="close-checkout">
+          <i data-lucide="x" style="width:18px; height:18px"></i>
+        </button>
+      </div>
+      <form id="order-form">
+        <div class="modal-body">
+          <p style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:16px; line-height:1.4">
+            Before we send your order to the kitchen, please enter your name and phone number so we can identify you.
+          </p>
+          <div class="form-group">
+            <label for="cust-name">Your Name</label>
+            <input type="text" id="cust-name" class="form-input" placeholder="e.g. Rajesh Kumar" required>
+          </div>
+          <div class="form-group">
+            <label for="cust-phone">Phone Number (10 digits)</label>
+            <input type="tel" id="cust-phone" class="form-input" placeholder="e.g. 9876543210" pattern="[0-9]{10}" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancel-checkout" style="flex:1">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex:2">Confirm Order</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Toast Notification Anchor -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="dev-footer">
+      Developed by <strong>Kashif</strong>
+    </footer>
+
+  </div>
+
+  <!-- Javascript Modules & Icon Libraries -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Initialize icons globally on script load
+    lucide.createIcons();
+  </script>
+  <script src="js/api.js"></script>
+  <script src="js/customer.js"></script>
+</body>
+</html>

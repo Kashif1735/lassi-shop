@@ -1,0 +1,58 @@
+[
+  {
+    "id": "item_1",
+    "name": "Alphonso Mango Lassi",
+    "category": "Lassi",
+    "price": 120,
+    "description": "Creamy yogurt drink blended with sweet Alphonso mango pulp, saffron, and cardamoms, topped with chopped pistachios.",
+    "image": "images/mango_lassi.jpg"
+  },
+  {
+    "id": "item_2",
+    "name": "Classic Sweet Lassi",
+    "category": "Lassi",
+    "price": 90,
+    "description": "Traditional Punjabi lassi churned with fresh yogurt, sweet cream (malai), and a hint of rose water.",
+    "image": "images/sweet_lassi.jpg"
+  },
+  {
+    "id": "item_3",
+    "name": "Royal Kesar Pista Lassi",
+    "category": "Lassi",
+    "price": 140,
+    "description": "Luxurious saffron and pistachio infused lassi, garnished with slivered almonds, pistachios, and saffron strands.",
+    "image": "images/kesar_pista.jpg"
+  },
+  {
+    "id": "item_4",
+    "name": "Fragrant Rose Lassi",
+    "category": "Lassi",
+    "price": 110,
+    "description": "Refreshing, fragrant lassi blended with organic rose syrup, cream, and topped with aromatic rose petals.",
+    "image": "images/rose_lassi.jpg"
+  },
+  {
+    "id": "item_5",
+    "name": "Punjabi Samosa (2 pcs)",
+    "category": "Snacks",
+    "price": 70,
+    "description": "Crispy golden pastry triangles stuffed with spiced potatoes and green peas, served with sweet tamarind and mint chutneys.",
+    "image": "images/samosa.jpg"
+  },
+  {
+    "id": "item_6",
+    "name": "Packaged Water Bottle (1L)",
+    "category": "Drinks",
+    "price": 20,
+    "description": "Chilled, pure packaged drinking water to keep you hydrated.",
+    "image": "images/water_bottle.jpg"
+  },
+  {
+    "id": "item_1787586957309",
+    "name": "hot tea",
+    "category": "Drinks",
+    "price": 20,
+    "description": "",
+    "image": "uploads/1787586957302-967800750.jpg"
+  }
+]

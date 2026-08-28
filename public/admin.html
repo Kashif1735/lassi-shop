@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lassi Shop - Owner Admin Dashboard</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <div class="admin-container">
+    
+    <!-- 1. Left Sidebar Navigation -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-top">
+        <div class="admin-logo">
+          <div class="admin-logo-text">
+            <i data-lucide="glass-water" style="color:var(--color-primary); fill:var(--color-primary-light); width:24px; height:24px"></i>
+            <span>Lassi Shop</span>
+          </div>
+          <span class="admin-logo-tag">Partner Panel</span>
+        </div>
+        
+        <nav class="admin-nav">
+          <a href="#" class="nav-item active" data-tab="orders">
+            <i data-lucide="shopping-bag"></i>
+            <span>Orders Board</span>
+          </a>
+          <a href="#" class="nav-item" data-tab="menu">
+            <i data-lucide="book-open"></i>
+            <span>Manage Menu</span>
+          </a>
+          <a href="#" class="nav-item" data-tab="tables">
+            <i data-lucide="qr-code"></i>
+            <span>Tables & QRs</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div>Lassi Shop Admin v1.0</div>
+        <div style="font-size:0.65rem; margin-top:4px">© 2026 All Rights Reserved</div>
+        <div style="font-size:0.65rem; margin-top:4px; color: var(--color-primary);">Developed by <strong>Kashif</strong></div>
+      </div>
+    </aside>
+
+    <!-- 2. Main Dashboard Area -->
+    <main class="admin-main">
+      
+      <!-- Top Title Bar -->
+      <header class="admin-header">
+        <div>
+          <h2 class="admin-title">Dashboard</h2>
+          <p class="admin-subtitle" id="dashboard-subtitle">Manage orders, items, and tables</p>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="refreshData()">
+          <i data-lucide="refresh-cw" style="width:16px; height:16px"></i> Refresh
+        </button>
+      </header>
+
+      <!-- Stats ribbon -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon-wrapper" style="background-color:var(--color-green-light); color:var(--color-green)">
+            <i data-lucide="indian-rupee" style="width:24px; height:24px"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Today's Sales</span>
+            <span class="stat-value" id="stat-sales-val">₹0</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper" style="background-color:var(--color-primary-light); color:var(--color-primary-dark)">
+            <i data-lucide="clock" style="width:24px; height:24px"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Active Orders</span>
+            <span class="stat-value" id="stat-active-val">0</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper" style="background-color:var(--color-orange-light); color:var(--color-orange)">
+            <i data-lucide="bell" style="width:24px; height:24px"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Pending Queue</span>
+            <span class="stat-value" id="stat-pending-val">0</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper" style="background-color:hsl(240, 10%, 90%); color:var(--color-text-muted)">
+            <i data-lucide="layout" style="width:24px; height:24px"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Total Tables</span>
+            <span class="stat-value" id="stat-tables-val">0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW A: Orders Board (Kanban Columns) -->
+      <section id="orders-view" class="dashboard-view active">
+        <div class="kanban-board">
+          
+          <!-- Column 1: Pending -->
+          <div class="kanban-column">
+            <div class="column-header pending">
+              <span>New Orders</span>
+              <span class="column-count" id="count-pending">0</span>
+            </div>
+            <div class="column-cards-container" id="cards-pending">
+              <!-- Order cards loaded dynamically -->
+            </div>
+          </div>
+
+          <!-- Column 2: Preparing -->
+          <div class="kanban-column">
+            <div class="column-header preparing">
+              <span>Preparing</span>
+              <span class="column-count" id="count-preparing">0</span>
+            </div>
+            <div class="column-cards-container" id="cards-preparing">
+              <!-- Order cards loaded dynamically -->
+            </div>
+          </div>
+
+          <!-- Column 3: Ready -->
+          <div class="kanban-column">
+            <div class="column-header ready">
+              <span>Ready for pickup</span>
+              <span class="column-count" id="count-ready">0</span>
+            </div>
+            <div class="column-cards-container" id="cards-ready">
+              <!-- Order cards loaded dynamically -->
+            </div>
+          </div>
+
+          <!-- Column 4: Completed -->
+          <div class="kanban-column">
+            <div class="column-header completed">
+              <span>Completed</span>
+              <span class="column-count" id="count-completed">0</span>
+            </div>
+            <div class="column-cards-container" id="cards-completed">
+              <!-- Order cards loaded dynamically -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VIEW B: Menu Management -->
+      <section id="menu-view" class="dashboard-view">
+        <div class="menu-editor-layout">
+          
+          <!-- Left: Add/Edit Form -->
+          <div class="editor-card">
+            <form id="menu-form" enctype="multipart/form-data" class="editor-form">
+              <h3 id="form-title">Add Menu Item</h3>
+              
+              <!-- Image Upload and Preview -->
+              <div class="form-group">
+                <label>Item Image</label>
+                <div class="image-preview-box" onclick="document.getElementById('item-image-input').click()">
+                  <img id="image-preview" src="" alt="Preview" style="display:none;">
+                  <div class="image-preview-placeholder" id="preview-placeholder">
+                    <i data-lucide="image-plus" style="width:32px; height:32px"></i>
+                    <span>Click to upload image</span>
+                  </div>
+                </div>
+                <input type="file" id="item-image-input" name="image" accept="image/*" style="display:none">
+              </div>
+
+              <div class="form-group">
+                <label for="item-name">Item Name</label>
+                <input type="text" id="item-name" class="form-input" placeholder="e.g. Saffron Lassi" required>
+              </div>
+
+              <div class="form-group">
+                <label for="item-category">Category</label>
+                <select id="item-category" class="form-input" required style="-webkit-appearance: listbox;">
+                  <option value="" disabled selected>Select category</option>
+                  <option value="Lassi">Lassi</option>
+                  <option value="Snacks">Snacks</option>
+                  <option value="Drinks">Drinks</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="item-price">Price (INR)</label>
+                <input type="number" id="item-price" class="form-input" placeholder="e.g. 120" min="0" required>
+              </div>
+
+              <div class="form-group">
+                <label for="item-desc">Description</label>
+                <textarea id="item-desc" class="form-input" rows="3" placeholder="Briefly describe taste, garnish ingredients..." style="resize:none"></textarea>
+              </div>
+
+              <div style="display:flex; gap:10px; margin-top:8px">
+                <button type="button" class="btn btn-secondary" id="cancel-edit-btn" style="display:none; flex:1">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="submit-menu-btn" style="flex:2">
+                  <i data-lucide="plus-circle"></i> Add Menu Item
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Right: Menu List Table -->
+          <div class="menu-items-table-container">
+            <h3 style="margin-bottom:16px">Menu Registry</h3>
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Thumbnail</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="menu-items-tbody">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VIEW C: Tables & QR Setup -->
+      <section id="tables-view" class="dashboard-view">
+        <div class="tables-config-layout">
+          
+          <!-- Left: Table Form -->
+          <div class="editor-card">
+            <form id="table-form" class="editor-form">
+              <h3>Register New Table</h3>
+              <p style="font-size:0.75rem; color:var(--color-text-muted); line-height:1.4">
+                Assign a table number and friendly name (e.g. Table 5, Balcony 1). The system automatically generates a mapping QR code.
+              </p>
+              <div class="form-group">
+                <label for="table-num">Table Number (URL Query ID)</label>
+                <input type="text" id="table-num" class="form-input" placeholder="e.g. 5" required>
+              </div>
+              <div class="form-group">
+                <label for="table-name">Table Label / Name</label>
+                <input type="text" id="table-name" class="form-input" placeholder="e.g. Table 5" required>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px">
+                <i data-lucide="plus-circle"></i> Register Table
+              </button>
+            </form>
+          </div>
+
+          <!-- Right: Grid of Tables -->
+          <div style="flex-grow:1">
+            <h3 style="margin-bottom:20px">Table Outlets & QR Codes</h3>
+            <div class="tables-list-grid" id="tables-grid">
+              <!-- Outlets loaded dynamically -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Overlay Backdrop -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+
+    <!-- QR Print Preview Modal -->
+    <div class="qr-modal" id="qr-modal">
+      <div class="modal-header">
+        <h3>
+          <i data-lucide="qr-code" style="color:var(--color-orange)"></i>
+          <span>Table QR Code</span>
+        </h3>
+        <button class="close-drawer-btn" id="close-qr-modal">
+          <i data-lucide="x" style="width:18px; height:18px"></i>
+        </button>
+      </div>
+      <div class="qr-modal-body">
+        
+        <!-- Print Frame -->
+        <div class="qr-print-frame" id="qr-print-frame">
+          <div class="qr-print-title">LASSI SHOP</div>
+          <div class="qr-print-code" id="qr-print-code">
+            <!-- QRCode canvas renders here -->
+          </div>
+          <div class="qr-print-footer" id="qr-table-title">Table X</div>
+          <div class="qr-print-instructions">Scan QR Code to Order Online</div>
+        </div>
+
+        <p class="qr-print-instructions" style="max-width:320px; font-size:0.8rem">
+          Print this QR code card and place it on the corresponding table. Customers scanning this card will automatically access the menu under this table number.
+        </p>
+
+      </div>
+      <div class="modal-footer" style="padding: 16px 20px; background-color: var(--bg-primary); display: flex; gap: 12px;">
+        <button type="button" class="btn btn-secondary" id="close-qr-modal-footer" style="flex:1">Close</button>
+        <button type="button" class="btn btn-primary" id="print-qr-btn" style="flex:2">
+          <i data-lucide="printer"></i> Print QR Card
+        </button>
+      </div>
+    </div>
+
+    <!-- Toast Notification Anchor -->
+    <div class="toast-container" id="toast-container"></div>
+
+  </div>
+
+  <!-- Javascript Modules & Libraries -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+  <!-- QRCode.js Library CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

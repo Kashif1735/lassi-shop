@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment variables — NEVER commit this file
+.env
+.env.local
+
+# Uploaded images (stored on Cloudinary)
+uploads/
+
+# PM2 / logs
+logs/
+*.log
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Vercel local dev cache
+.vercel/
