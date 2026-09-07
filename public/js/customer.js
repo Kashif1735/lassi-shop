@@ -1,55 +1,94 @@
 // Map category name → relevant emoji icon
+// Only uses emojis with universal support (pre-2019, all Windows/Android/iOS)
 function categoryEmoji(category, name) {
   const n = (name || '').toLowerCase();
   const c = (category || '').toLowerCase();
 
-  // Name-specific overrides
-  if (n.includes('mango'))        return '🥭';
-  if (n.includes('strawberry'))   return '🍓';
-  if (n.includes('banana'))       return '🍌';
-  if (n.includes('chocolate') || n.includes('choco')) return '🍫';
-  if (n.includes('nutella'))      return '🍫';
-  if (n.includes('brownie') || n.includes('lava cake')) return '🧁';
-  if (n.includes('oreo'))         return '🍪';
-  if (n.includes('kit kat'))      return '🍫';
-  if (n.includes('butterscotch')) return '🍯';
-  if (n.includes('rose'))         return '🌹';
-  if (n.includes('pista') || n.includes('pistachio')) return '🌿';
-  if (n.includes('saffron') || n.includes('safron') || n.includes('kesar')) return '✨';
-  if (n.includes('dry fruit'))    return '🌰';
-  if (n.includes('fruit'))        return '🍑';
-  if (n.includes('coffee'))       return '☕';
-  if (n.includes('mojito'))       return '🍃';
-  if (n.includes('lime') || n.includes('lemon')) return '🍋';
-  if (n.includes('watermelon'))   return '🍉';
-  if (n.includes('blueberry'))    return '🫐';
-  if (n.includes('rainbow'))      return '🌈';
-  if (n.includes('kulfi'))        return '🍦';
-  if (n.includes('sandwich'))     return '🥪';
-  if (n.includes('chicken'))      return '🍗';
-  if (n.includes('fries'))        return '🍟';
-  if (n.includes('sizzl'))        return '🔥';
-  if (n.includes('smoothie'))     return '🥤';
+  // ── Name-specific (most specific first) ────────────────────────────────────
+  if (n.includes('mango'))                          return '🍊';
+  if (n.includes('strawberry'))                     return '🍓';
+  if (n.includes('banana'))                         return '🍌';
+  if (n.includes('watermelon'))                     return '🍉';
+  if (n.includes('apple'))                          return '🍎';
+  if (n.includes('papaya'))                         return '🍈';
+  if (n.includes('blueberry') || n.includes('blackcurrant')) return '🍇';
+  if (n.includes('rose'))                           return '🌹';
+  if (n.includes('rainbow'))                        return '🌈';
+  if (n.includes('kulfi'))                          return '🍦';
+  if (n.includes('kesar') || n.includes('saffron') || n.includes('safron')) return '🌟';
+  if (n.includes('pista') || n.includes('pistachio')) return '🍵';
+  if (n.includes('dry fruit') || n.includes('anjeer') || n.includes('kajur')) return '🌰';
+  if (n.includes('butterscotch'))                   return '🍮';
+  if (n.includes('nutella'))                        return '🍫';
+  if (n.includes('brownie') || n.includes('lava cake')) return '🎂';
+  if (n.includes('oreo') || n.includes('cookie') || n.includes('bourbon')) return '🍪';
+  if (n.includes('kit kat') || n.includes('kitkat')) return '🍫';
+  if (n.includes('ferrero'))                        return '🍬';
   if (n.includes('mississippi') || n.includes('mud')) return '🍮';
-  if (n.includes('ferrero'))      return '🍬';
+  if (n.includes('death by chocolate'))             return '🍫';
+  if (n.includes('chocolate') || n.includes('choco')) return '🍫';
+  if (n.includes('vanilla'))                        return '🍨';
+  if (n.includes('caramel'))                        return '🍮';
+  if (n.includes('coffee'))                         return '☕';
+  if (n.includes('mojito') || n.includes('mint'))   return '🍃';
+  if (n.includes('lime') || n.includes('lemon'))    return '🍋';
+  if (n.includes('sizzl'))                          return '🔥';
+  if (n.includes('smoothie'))                       return '🥤';
+  if (n.includes('chicken'))                        return '🍗';
+  if (n.includes('sandwich') || n.includes('paneer') || n.includes('cheese') || n.includes('corn')) return '🥪';
+  if (n.includes('fries'))                          return '🍟';
+  if (n.includes('fruit'))                          return '🍑';
 
-  // Category fallbacks
-  if (c.includes('lassi'))        return '🥛';
-  if (c.includes('falooda'))      return '🧋';
+  // ── Category fallbacks ──────────────────────────────────────────────────────
+  if (c.includes('lassi'))                          return '🥛';
+  if (c.includes('falooda'))                        return '🍹';
+  if (c.includes('cold coffee'))                    return '☕';
+  if (c.includes('freak'))                          return '🎉';
+  if (c.includes('thick shake') || c.includes('thick shakes')) return '🥤';
   if (c.includes('milkshake') || c.includes('shake')) return '🥤';
-  if (c.includes('thick'))        return '🥤';
-  if (c.includes('freak'))        return '🎉';
-  if (c.includes('cold coffee'))  return '☕';
-  if (c.includes('smoothie'))     return '🥤';
-  if (c.includes('soda'))         return '🫧';
-  if (c.includes('mojito'))       return '🍃';
-  if (c.includes('ice cream') || c.includes('sundae')) return '🍨';
-  if (c.includes('fruits'))       return '🍑';
-  if (c.includes('sizzler'))      return '🔥';
+  if (c.includes('smoothie'))                       return '🥤';
+  if (c.includes('soda'))                           return '🍺';
+  if (c.includes('mojito'))                         return '🍃';
+  if (c.includes('special ice cream'))              return '🍨';
+  if (c.includes('ice cream'))                      return '🍦';
+  if (c.includes('fruits'))                         return '🍑';
+  if (c.includes('sizzler'))                        return '🔥';
   if (c.includes('grill') || c.includes('sandwich')) return '🥪';
-  if (c.includes('fries'))        return '🍟';
+  if (c.includes('french fries') || c.includes('fries')) return '🍟';
 
-  return '🍹'; // generic drink fallback
+  return '🍹'; // universal fallback
+}
+
+// Get gradient CSS class based on category/name
+function emojiBgClass(category, name) {
+  const n = (name || '').toLowerCase();
+  const c = (category || '').toLowerCase();
+  if (n.includes('chocolate') || n.includes('nutella') || n.includes('brownie') || n.includes('oreo') || n.includes('kit kat') || n.includes('choco') || n.includes('death')) return 'emoji-bg-chocolate';
+  if (n.includes('coffee'))                         return 'emoji-bg-coffee';
+  if (n.includes('strawberry'))                     return 'emoji-bg-smoothie';
+  if (n.includes('mango') || n.includes('banana') || n.includes('papaya') || n.includes('watermelon') || n.includes('apple')) return 'emoji-bg-fruit';
+  if (n.includes('mojito') || n.includes('lime') || n.includes('lemon') || n.includes('mint')) return 'emoji-bg-mojito';
+  if (n.includes('sizzl'))                          return 'emoji-bg-sizzler';
+  if (n.includes('fries'))                          return 'emoji-bg-fries';
+  if (n.includes('sandwich') || n.includes('chicken') || n.includes('paneer')) return 'emoji-bg-sandwich';
+  if (n.includes('kesar') || n.includes('saffron') || n.includes('safron') || n.includes('rose') || n.includes('pista')) return 'emoji-bg-lassi';
+  if (n.includes('butterscotch') || n.includes('caramel')) return 'emoji-bg-fries';
+  if (n.includes('vanilla') || n.includes('rainbow')) return 'emoji-bg-ice-cream';
+  if (n.includes('fruit'))                          return 'emoji-bg-fruit';
+  if (n.includes('dry fruit') || n.includes('anjeer') || n.includes('kajur')) return 'emoji-bg-default';
+  if (c.includes('lassi'))                          return 'emoji-bg-lassi';
+  if (c.includes('falooda'))                        return 'emoji-bg-falooda';
+  if (c.includes('cold coffee'))                    return 'emoji-bg-coffee';
+  if (c.includes('freak'))                          return 'emoji-bg-freak';
+  if (c.includes('thick') || c.includes('shake') || c.includes('milkshake')) return 'emoji-bg-shake';
+  if (c.includes('smoothie'))                       return 'emoji-bg-smoothie';
+  if (c.includes('soda'))                           return 'emoji-bg-soda';
+  if (c.includes('mojito'))                         return 'emoji-bg-mojito';
+  if (c.includes('ice cream') || c.includes('sundae') || c.includes('sizzler')) return 'emoji-bg-ice-cream';
+  if (c.includes('fruits'))                         return 'emoji-bg-fruit';
+  if (c.includes('fries'))                          return 'emoji-bg-fries';
+  if (c.includes('grill') || c.includes('sandwich')) return 'emoji-bg-sandwich';
+  return 'emoji-bg-default';
 }
 
 // Customer Side Logic
@@ -172,7 +211,7 @@ function renderMenu() {
     const card = document.createElement('div');
     card.className = 'menu-card';
     card.innerHTML = `
-      <div class="item-image-wrapper">
+      <div class="item-image-wrapper ${emojiBgClass(item.category, item.name)}">
         <div class="item-emoji">${categoryEmoji(item.category, item.name)}</div>
       </div>
       <div class="item-info">
