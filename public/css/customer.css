@@ -155,7 +155,23 @@
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
-  background-color: var(--bg-primary);
+  background: linear-gradient(135deg, var(--color-primary-light), var(--bg-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255,170,29,0.15);
+}
+
+.item-emoji {
+  font-size: 3rem;
+  line-height: 1;
+  user-select: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  transition: transform 0.3s ease;
+}
+
+.menu-card:hover .item-emoji {
+  transform: scale(1.15);
 }
 
 .item-image {
@@ -692,6 +708,11 @@
 
 /* Developer Footer */
 .dev-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
   text-align: center;
   padding: 14px 20px;
   font-size: 0.78rem;
@@ -703,4 +724,21 @@
 
 .dev-footer strong {
   color: var(--color-orange);
+}
+
+.dev-footer a {
+  color: var(--color-primary-dark);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dev-footer a:hover {
+  text-decoration: underline;
+}
+
+.dev-footer-divider {
+  color: var(--color-text-muted);
 }

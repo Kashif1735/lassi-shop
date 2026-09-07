@@ -1,8 +1,55 @@
-// Helper: resolve image URL - Cloudinary URLs are absolute, legacy local paths are relative
-function resolveImageUrl(imagePath) {
-  if (!imagePath) return '/images/mango_lassi.jpg'; // fallback
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
-  return '/' + imagePath.replace(/^\//, ''); // ensure leading slash for local paths
+// Map category name → relevant emoji icon
+function categoryEmoji(category, name) {
+  const n = (name || '').toLowerCase();
+  const c = (category || '').toLowerCase();
+
+  // Name-specific overrides
+  if (n.includes('mango'))        return '🥭';
+  if (n.includes('strawberry'))   return '🍓';
+  if (n.includes('banana'))       return '🍌';
+  if (n.includes('chocolate') || n.includes('choco')) return '🍫';
+  if (n.includes('nutella'))      return '🍫';
+  if (n.includes('brownie') || n.includes('lava cake')) return '🧁';
+  if (n.includes('oreo'))         return '🍪';
+  if (n.includes('kit kat'))      return '🍫';
+  if (n.includes('butterscotch')) return '🍯';
+  if (n.includes('rose'))         return '🌹';
+  if (n.includes('pista') || n.includes('pistachio')) return '🌿';
+  if (n.includes('saffron') || n.includes('safron') || n.includes('kesar')) return '✨';
+  if (n.includes('dry fruit'))    return '🌰';
+  if (n.includes('fruit'))        return '🍑';
+  if (n.includes('coffee'))       return '☕';
+  if (n.includes('mojito'))       return '🍃';
+  if (n.includes('lime') || n.includes('lemon')) return '🍋';
+  if (n.includes('watermelon'))   return '🍉';
+  if (n.includes('blueberry'))    return '🫐';
+  if (n.includes('rainbow'))      return '🌈';
+  if (n.includes('kulfi'))        return '🍦';
+  if (n.includes('sandwich'))     return '🥪';
+  if (n.includes('chicken'))      return '🍗';
+  if (n.includes('fries'))        return '🍟';
+  if (n.includes('sizzl'))        return '🔥';
+  if (n.includes('smoothie'))     return '🥤';
+  if (n.includes('mississippi') || n.includes('mud')) return '🍮';
+  if (n.includes('ferrero'))      return '🍬';
+
+  // Category fallbacks
+  if (c.includes('lassi'))        return '🥛';
+  if (c.includes('falooda'))      return '🧋';
+  if (c.includes('milkshake') || c.includes('shake')) return '🥤';
+  if (c.includes('thick'))        return '🥤';
+  if (c.includes('freak'))        return '🎉';
+  if (c.includes('cold coffee'))  return '☕';
+  if (c.includes('smoothie'))     return '🥤';
+  if (c.includes('soda'))         return '🫧';
+  if (c.includes('mojito'))       return '🍃';
+  if (c.includes('ice cream') || c.includes('sundae')) return '🍨';
+  if (c.includes('fruits'))       return '🍑';
+  if (c.includes('sizzler'))      return '🔥';
+  if (c.includes('grill') || c.includes('sandwich')) return '🥪';
+  if (c.includes('fries'))        return '🍟';
+
+  return '🍹'; // generic drink fallback
 }
 
 // Customer Side Logic
@@ -126,7 +173,7 @@ function renderMenu() {
     card.className = 'menu-card';
     card.innerHTML = `
       <div class="item-image-wrapper">
-        <img class="item-image" src="${resolveImageUrl(item.image)}" alt="${item.name}" loading="lazy" onerror="this.src='/images/mango_lassi.jpg'">
+        <div class="item-emoji">${categoryEmoji(item.category, item.name)}</div>
       </div>
       <div class="item-info">
         <div class="item-header">
