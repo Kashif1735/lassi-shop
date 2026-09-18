@@ -134,45 +134,76 @@
 .menu-card {
   background-color: var(--bg-secondary);
   border-radius: var(--radius-md);
-  padding: 12px;
+  padding: 14px;
   display: flex;
   gap: 16px;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  border-left: 4px solid transparent;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-left-color var(--transition-fast);
   overflow: hidden;
+  position: relative;
 }
 
 .menu-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(30,18,10,0.10);
+  border-left-color: var(--color-orange);
 }
 
 .item-image-wrapper {
-  width: 100px;
-  height: 100px;
-  border-radius: var(--radius-sm);
+  width: 90px;
+  height: 90px;
+  border-radius: 18px;
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
-  background: linear-gradient(135deg, var(--color-primary-light), var(--bg-primary));
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid rgba(255,170,29,0.15);
+  background: var(--emoji-bg, linear-gradient(135deg, #fff3e0, #ffe0b2));
+  box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-card:hover .item-image-wrapper {
+  transform: scale(1.06) rotate(-2deg);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.14);
 }
 
 .item-emoji {
-  font-size: 3rem;
+  font-size: 2.8rem;
   line-height: 1;
   user-select: none;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
   transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .menu-card:hover .item-emoji {
-  transform: scale(1.15);
+  transform: scale(1.18) rotate(4deg);
 }
+
+/* Per-category gradient backgrounds */
+.emoji-bg-lassi        { background: linear-gradient(135deg, #fff8e1, #ffe082); }
+.emoji-bg-falooda      { background: linear-gradient(135deg, #fce4ec, #f8bbd0); }
+.emoji-bg-coffee       { background: linear-gradient(135deg, #efebe9, #d7ccc8); }
+.emoji-bg-shake        { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+.emoji-bg-chocolate    { background: linear-gradient(135deg, #3e2723, #6d4c41); }
+.emoji-bg-ice-cream    { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+.emoji-bg-soda         { background: linear-gradient(135deg, #e0f7fa, #b2ebf2); }
+.emoji-bg-mojito       { background: linear-gradient(135deg, #f1f8e9, #dcedc8); }
+.emoji-bg-fries        { background: linear-gradient(135deg, #fff8e1, #ffecb3); }
+.emoji-bg-sandwich     { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
+.emoji-bg-sizzler      { background: linear-gradient(135deg, #fbe9e7, #ffccbc); }
+.emoji-bg-smoothie     { background: linear-gradient(135deg, #f3e5f5, #e1bee7); }
+.emoji-bg-fruit        { background: linear-gradient(135deg, #fff9c4, #fff59d); }
+.emoji-bg-freak        { background: linear-gradient(135deg, #ede7f6, #d1c4e9); }
+.emoji-bg-default      { background: linear-gradient(135deg, #fff3e0, #ffd180); }
 
 .item-image {
   width: 100%;
