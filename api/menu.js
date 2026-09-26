@@ -1,10 +1,14 @@
 const { createClient } = require('@supabase/supabase-js');
 
 function getDB() {
-  return createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  return createClient(url, key, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false
+    }
+  });
 }
 
 async function handler(req, res) {
@@ -22,7 +26,12 @@ async function handler(req, res) {
         .from('menu')
         .select('*')
         .order('created_at', { ascending: true });
-      if (error) return res.status(500).json({ error: error.message, code: error.code });
+      if (error) return res.status(500).json({
+        error: error.message,
+        code: error.code,
+        hint: error.hint,
+        details: error.details
+      });
       return res.status(200).json(data);
     }
 
@@ -76,8 +85,12 @@ async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed.' });
 
   } catch (err) {
-    console.error('[menu] error:', err.message);
-    return res.status(500).json({ error: err.message });
+    console.error('[menu] error:', err.message, err.cause);
+    return res.status(500).json({
+      error: err.message,
+      cause: err.cause ? String(err.cause) : undefined,
+      code: ''
+    });
   }
 }
 
@@ -116,7 +129,6 @@ function parseForm(req) {
       return;
     }
 
-    // URL-encoded or empty
     let raw = '';
     req.on('data', c => { raw += c; });
     req.on('end', () => {
@@ -145,6 +157,5 @@ function uploadImage(buffer, filename) {
   });
 }
 
-// Export — Vercel needs the config on the function itself
 handler.config = { api: { bodyParser: false } };
 module.exports = handler;
