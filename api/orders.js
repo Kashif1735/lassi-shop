@@ -1,9 +1,20 @@
-const { createClient } = require('@supabase/supabase-js');
+const connectDB = require('./_lib/mongodb');
+const mongoose  = require('mongoose');
 
-function getSupabase() {
-  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-}
+// ── Schema ─────────────────────────────────────────────────────────────────
+const orderSchema = new mongoose.Schema({
+  orderNumber:   { type: String, required: true },
+  customerName:  { type: String, required: true },
+  customerPhone: { type: String, required: true },
+  tableNumber:   { type: String, default: 'Takeaway' },
+  items:         { type: Array,  required: true },
+  total:         { type: Number, required: true },
+  status:        { type: String, default: 'Pending' }
+}, { timestamps: true });
 
+const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);
+
+// ── Helpers ────────────────────────────────────────────────────────────────
 function readBody(req) {
   return new Promise((resolve, reject) => {
     if (req.body) return resolve(req.body);
@@ -14,27 +25,33 @@ function readBody(req) {
   });
 }
 
-function mapOrder(r) {
+function toJSON(doc) {
   return {
-    id: r.id, orderNumber: r.order_number, customerName: r.customer_name,
-    customerPhone: r.customer_phone, tableNumber: r.table_number,
-    items: r.items, total: r.total, status: r.status, createdAt: r.created_at
+    id:            doc._id,
+    orderNumber:   doc.orderNumber,
+    customerName:  doc.customerName,
+    customerPhone: doc.customerPhone,
+    tableNumber:   doc.tableNumber,
+    items:         doc.items,
+    total:         doc.total,
+    status:        doc.status,
+    createdAt:     doc.createdAt
   };
 }
 
+// ── Handler ────────────────────────────────────────────────────────────────
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const db = getSupabase();
-
   try {
+    await connectDB();
+
     if (req.method === 'GET') {
-      const { data, error } = await db.from('orders').select('*').order('created_at', { ascending: false });
-      if (error) return res.status(500).json({ error: error.message });
-      return res.json(data.map(mapOrder));
+      const orders = await Order.find().sort({ createdAt: -1 }).lean();
+      return res.json(orders.map(toJSON));
     }
 
     if (req.method === 'POST') {
@@ -43,15 +60,17 @@ module.exports = async function handler(req, res) {
       if (!customerName || !customerPhone || !items?.length)
         return res.status(400).json({ error: 'Name, phone and items required.' });
 
-      const { count } = await db.from('orders').select('*', { count: 'exact', head: true });
-      const { data, error } = await db.from('orders').insert({
-        order_number: String((count || 0) + 1001),
-        customer_name: customerName, customer_phone: customerPhone,
-        table_number: tableNumber || 'Takeaway',
-        items, total: parseFloat(total), status: 'Pending'
-      }).select().single();
-      if (error) return res.status(500).json({ error: error.message });
-      return res.status(201).json(mapOrder(data));
+      const count = await Order.countDocuments();
+      const order = await Order.create({
+        orderNumber:   String(count + 1001),
+        customerName,
+        customerPhone,
+        tableNumber:   tableNumber || 'Takeaway',
+        items,
+        total:         parseFloat(total),
+        status:        'Pending'
+      });
+      return res.status(201).json(toJSON(order.toObject()));
     }
 
     return res.status(405).json({ error: 'Method not allowed.' });

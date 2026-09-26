@@ -1,8 +1,17 @@
-const { createClient } = require('@supabase/supabase-js');
+const connectDB = require('../../_lib/mongodb');
+const mongoose  = require('mongoose');
 
-function getSupabase() {
-  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-}
+const orderSchema = new mongoose.Schema({
+  orderNumber:   String,
+  customerName:  String,
+  customerPhone: String,
+  tableNumber:   String,
+  items:         Array,
+  total:         Number,
+  status:        String
+}, { timestamps: true });
+
+const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);
 
 function readBody(req) {
   return new Promise((resolve, reject) => {
@@ -22,19 +31,26 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'PATCH') return res.status(405).json({ error: 'Method not allowed.' });
 
   try {
+    await connectDB();
+
     const { id } = req.query;
     const { status } = await readBody(req);
     const valid = ['Pending', 'Preparing', 'Ready', 'Completed'];
     if (!valid.includes(status)) return res.status(400).json({ error: 'Invalid status.' });
 
-    const db = getSupabase();
-    const { data, error } = await db.from('orders').update({ status }).eq('id', id).select().single();
-    if (error || !data) return res.status(404).json({ error: 'Order not found.' });
+    const order = await Order.findByIdAndUpdate(id, { status }, { new: true }).lean();
+    if (!order) return res.status(404).json({ error: 'Order not found.' });
 
     return res.json({
-      id: data.id, orderNumber: data.order_number, customerName: data.customer_name,
-      customerPhone: data.customer_phone, tableNumber: data.table_number,
-      items: data.items, total: data.total, status: data.status, createdAt: data.created_at
+      id:            order._id,
+      orderNumber:   order.orderNumber,
+      customerName:  order.customerName,
+      customerPhone: order.customerPhone,
+      tableNumber:   order.tableNumber,
+      items:         order.items,
+      total:         order.total,
+      status:        order.status,
+      createdAt:     order.createdAt
     });
   } catch (err) {
     console.error('[status]', err);

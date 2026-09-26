@@ -1,41 +1,34 @@
-const { createClient } = require('@supabase/supabase-js');
+const connectDB = require('./_lib/mongodb');
+const mongoose  = require('mongoose');
 
-function getDB() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  return createClient(url, key, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false
-    }
-  });
-}
+// ── Schema ─────────────────────────────────────────────────────────────────
+const menuSchema = new mongoose.Schema({
+  name:        { type: String, required: true },
+  category:    { type: String, required: true },
+  price:       { type: Number, required: true },
+  description: { type: String, default: '' },
+  image:       { type: String, default: '' },
+}, { timestamps: true });
 
+const Menu = mongoose.models.Menu || mongoose.model('Menu', menuSchema);
+
+// ── Handler ────────────────────────────────────────────────────────────────
 async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const db = getDB();
-
   try {
-    // ── GET ────────────────────────────────────────────────────────────────────
+    await connectDB();
+
+    // ── GET ──────────────────────────────────────────────────────────────────
     if (req.method === 'GET') {
-      const { data, error } = await db
-        .from('menu')
-        .select('*')
-        .order('created_at', { ascending: true });
-      if (error) return res.status(500).json({
-        error: error.message,
-        code: error.code,
-        hint: error.hint,
-        details: error.details
-      });
-      return res.status(200).json(data);
+      const items = await Menu.find().sort({ createdAt: 1 }).lean();
+      return res.status(200).json(items.map(toJSON));
     }
 
-    // ── POST ───────────────────────────────────────────────────────────────────
+    // ── POST ─────────────────────────────────────────────────────────────────
     if (req.method === 'POST') {
       const { fields, file } = await parseForm(req);
       const { name, category, price, description } = fields;
@@ -45,56 +38,64 @@ async function handler(req, res) {
       let image = '';
       if (file) image = await uploadImage(file.buffer, file.filename);
 
-      const { data, error } = await db.from('menu')
-        .insert({ name, category, price: parseFloat(price), description: description || '', image })
-        .select().single();
-      if (error) return res.status(500).json({ error: error.message });
-      return res.status(201).json(data);
+      const item = await Menu.create({
+        name, category, price: parseFloat(price),
+        description: description || '', image
+      });
+      return res.status(201).json(toJSON(item.toObject()));
     }
 
-    // ── PUT ────────────────────────────────────────────────────────────────────
+    // ── PUT ──────────────────────────────────────────────────────────────────
     if (req.method === 'PUT') {
       const id = req.query.id;
       if (!id) return res.status(400).json({ error: 'ID required.' });
-      const { data: existing } = await db.from('menu').select('*').eq('id', id).single();
+
+      const existing = await Menu.findById(id).lean();
       if (!existing) return res.status(404).json({ error: 'Item not found.' });
 
       const { fields, file } = await parseForm(req);
       const image = file ? await uploadImage(file.buffer, file.filename) : existing.image;
 
-      const { data, error } = await db.from('menu').update({
+      const updated = await Menu.findByIdAndUpdate(id, {
         name:        fields.name        || existing.name,
         category:    fields.category    || existing.category,
         price:       fields.price       ? parseFloat(fields.price) : existing.price,
         description: fields.description !== undefined ? fields.description : existing.description,
         image
-      }).eq('id', id).select().single();
-      if (error) return res.status(500).json({ error: error.message });
-      return res.status(200).json(data);
+      }, { new: true }).lean();
+
+      return res.status(200).json(toJSON(updated));
     }
 
-    // ── DELETE ─────────────────────────────────────────────────────────────────
+    // ── DELETE ───────────────────────────────────────────────────────────────
     if (req.method === 'DELETE') {
       const id = req.query.id;
       if (!id) return res.status(400).json({ error: 'ID required.' });
-      const { error } = await db.from('menu').delete().eq('id', id);
-      if (error) return res.status(500).json({ error: error.message });
+      await Menu.findByIdAndDelete(id);
       return res.status(200).json({ message: 'Deleted.' });
     }
 
     return res.status(405).json({ error: 'Method not allowed.' });
 
   } catch (err) {
-    console.error('[menu] error:', err.message, err.cause);
-    return res.status(500).json({
-      error: err.message,
-      cause: err.cause ? String(err.cause) : undefined,
-      code: ''
-    });
+    console.error('[menu]', err);
+    return res.status(500).json({ error: err.message });
   }
 }
 
-// Parse multipart or JSON body
+// ── Helpers ────────────────────────────────────────────────────────────────
+function toJSON(doc) {
+  return {
+    id:          doc._id,
+    name:        doc.name,
+    category:    doc.category,
+    price:       doc.price,
+    description: doc.description,
+    image:       doc.image,
+    createdAt:   doc.createdAt
+  };
+}
+
 function parseForm(req) {
   return new Promise((resolve, reject) => {
     const ct = req.headers['content-type'] || '';
